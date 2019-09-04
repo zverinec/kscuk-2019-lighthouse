@@ -99,6 +99,7 @@ int main(void)
     unsigned int progress = 0;
     uint8_t brightness = 0;
 
+    // Set brightness
     while( (PA_IDR & (1 << PA1) ) ) {
         if ( !(PA_IDR & (1 << PA2) ) ) {
             brightness++;
@@ -107,15 +108,25 @@ int main(void)
             delay_ms( 300 );
         }
         progress++;
+        red( progress, bright[brightness] );
+        ws_showarray(ledbuffer, LED_COUNT);
+        delay_ms( 10 );
+    }
+
+    delay_ms( 300 );
+
+    // Brightness fixed, Wait for first group
+    while( (PA_IDR & (1 << PA1)) && (PA_IDR & (1 << PA2)) ) {
+        progress++;
         rainbow( progress, bright[brightness] );
         ws_showarray(ledbuffer, LED_COUNT);
         delay_ms( 10 );
     }
 
-
     delay_ms( 300 );
     uint8_t mode = 0; // red
 
+    // Run
     while ( 1 ) {
         if ( !(PA_IDR & (1 << PA1) ) || !(PA_IDR & (1 << PA2) ) ) {
             mode++;
