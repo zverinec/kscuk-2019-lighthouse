@@ -144,7 +144,8 @@ int main(void)
 
     PA_CR1 |= (1 << PA1) | (1 << PA2);
 
-    if ( !(PA_IDR & (1 << PA1)) || !(PA_IDR & (1 << PA2)) ) {
+    delay_ms( 10 );
+    if ( !(PA_IDR & (1 << PA1)) && !(PA_IDR & (1 << PA2)) ) {
         // reset times in EEPROM
         for(uint8_t i = 0; i < modeCount; ++i)
             EEWriteU16(EEPROM_TIME_START + i*EEPROM_TIME_STEP, 0);
