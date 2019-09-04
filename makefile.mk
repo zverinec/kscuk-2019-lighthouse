@@ -10,7 +10,7 @@ CC = sdcc
 LD = sdld
 
 
-.PHONY: all compile clean flash complete
+.PHONY: all compile clean flash complete read_eeprom
 
 all: clean $(OBJS)
 	@echo "Linking $(SRC_NAME).c with libs, Intel-Hex-File: $(SRC_NAME).ihx"
@@ -45,4 +45,7 @@ ifeq ($(FLASHERPROG), 1)
 else
 	stm8flash -c stlinkv2 -p $(DEVICE_NAME) -w $(SRC_NAME).ihx
 endif
+
+read_eeprom:
+	stm8flash -c stlinkv2 -p stm8s103f3 -s eeprom -r eeprom.bin && xxd eeprom.bin | head
 complete: clean all flash
