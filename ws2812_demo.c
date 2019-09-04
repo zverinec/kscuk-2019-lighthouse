@@ -75,11 +75,9 @@ void white( unsigned int progress, uint8_t brightness ) {
 }
 
 void (*modes[]) ( unsigned int, uint8_t ) = {
-    rainbow,
     red,
     green,
-    blue,
-    white
+    blue
 };
 
 int modeCount = sizeof(modes) / sizeof(modes[0]);
@@ -98,18 +96,28 @@ int main(void)
 
     PA_CR1 |= (1 << PA1) | (1 << PA2);
 
-
     unsigned int progress = 0;
     uint8_t brightness = 0;
-    uint8_t mode = 0;
-    while( 1 ) {
-        if ( !(PA_IDR & (1 << PA1) ) ) {
+
+    while( (PA_IDR & (1 << PA1) ) ) {
+        if ( !(PA_IDR & (1 << PA2) ) ) {
             brightness++;
             if ( brightness == brightCount )
                 brightness = 0;
             delay_ms( 300 );
         }
-        if ( !(PA_IDR & (1 << PA2) ) ) {
+        progress++;
+        rainbow( progress, bright[brightness] );
+        ws_showarray(ledbuffer, LED_COUNT);
+        delay_ms( 10 );
+    }
+
+
+    delay_ms( 300 );
+    uint8_t mode = 0; // red
+
+    while ( 1 ) {
+        if ( !(PA_IDR & (1 << PA1) ) || !(PA_IDR & (1 << PA2) ) ) {
             mode++;
             if ( mode == modeCount )
                 mode = 0;
@@ -120,9 +128,5 @@ int main(void)
         ws_showarray(ledbuffer, LED_COUNT);
         delay_ms( 10 );
     }
-
-
-
-    while( 1 );
 }
 

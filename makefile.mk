@@ -41,7 +41,7 @@ clean:
 
 flash:
 ifeq ($(FLASHERPROG), 1)
-	stm8_bootflash /dev/ttyUSB0 $(SRC_NAME).ihx notxbar 1>&2
+	stm8_bootflash /dev/ttyACM0 $(SRC_NAME).ihx notxbar 1>&2
 else
 	stm8flash -c stlinkv2 -p $(DEVICE_NAME) -w $(SRC_NAME).ihx
 endif
