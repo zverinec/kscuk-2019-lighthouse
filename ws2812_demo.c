@@ -92,9 +92,8 @@ void (*modes[]) ( unsigned int, uint8_t ) = {
     red,
     green,
     blue,
-    black,
 };
-uint16_t times[4]; // change when changing modes
+uint16_t times[3]; // change when changing modes
 
 void EEWriteU8(uint16_t address, uint8_t value)
 {
@@ -192,7 +191,7 @@ int main(void)
     // Brightness fixed, Wait for first group
     while( (PA_IDR & (1 << PA1)) && (PA_IDR & (1 << PA2)) ) {
         progress++;
-        rainbow( progress, bright[brightness] );
+        rainbow( progress, bright[brightness >= 2 ? brightness-2 : 0] );
         ws_showarray(ledbuffer, LED_COUNT);
         delay_ms( 10 );
     }
