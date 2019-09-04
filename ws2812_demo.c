@@ -10,6 +10,10 @@ int32_t abs( int32_t x ) {
     return x < 0 ? -x: x;
 }
 
+int8_t abs8( int8_t x ) {
+    return x < 0 ? -x: x;
+}
+
 void set_hsv( uint8_t* leds, uint8_t index, unsigned char hue, unsigned char sat, unsigned char val ) {
     int32_t h = 6LL * (int32_t)hue;
     int32_t c = (int32_t)val * (int32_t)sat;
@@ -47,23 +51,25 @@ void rainbow( unsigned int progress, uint8_t brightness ) {
 }
 
 void red( unsigned int progress, uint8_t brightness ) {
-    progress = progress;
     for ( uint8_t i = 0; i != LED_COUNT; i++ ) {
-        set_rgb( ledbuffer, i, brightness, 0, 0 );
+        uint8_t br = ((((progress>>3)&1)^(i&1)) ? 0.2 : 1) * brightness;
+        set_rgb( ledbuffer, i, br, 0, 0 );
     }
 }
 
 void green( unsigned int progress, uint8_t brightness ) {
     progress = progress;
     for ( uint8_t i = 0; i != LED_COUNT; i++ ) {
-        set_rgb( ledbuffer, i, 0, brightness, 0 );
+        uint8_t br = ((((progress>>3)&1)^(i&1)) ? 0.2 : 1) * brightness;
+        set_rgb( ledbuffer, i, 0, br, 0 );
     }
 }
 
 void blue( unsigned int progress, uint8_t brightness ) {
     progress = progress;
     for ( uint8_t i = 0; i != LED_COUNT; i++ ) {
-        set_rgb( ledbuffer, i, 0, 0, brightness );
+        uint8_t br = ((((progress>>3)&1)^(i&1)) ? 0.2 : 1) * brightness;
+        set_rgb( ledbuffer, i, 0, 0, br );
     }
 }
 
