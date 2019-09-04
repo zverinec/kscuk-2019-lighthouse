@@ -75,6 +75,7 @@ void white( unsigned int progress, uint8_t brightness ) {
 }
 
 void black( unsigned int progress, uint8_t brightness ) {
+    (void)brightness;
     progress = progress;
     for ( uint8_t i = 0; i != LED_COUNT; i++ ) {
         set_rgb( ledbuffer, i, 0, 0, 0 );
@@ -143,6 +144,20 @@ int main(void)
 
     PA_CR1 |= (1 << PA1) | (1 << PA2);
 
+    if ( !(PA_IDR & (1 << PA1)) || !(PA_IDR & (1 << PA2)) ) {
+        // reset times in EEPROM
+        for(uint8_t i = 0; i < modeCount; ++i)
+            EEWriteU16(EEPROM_TIME_START + i*EEPROM_TIME_STEP, 0);
+        for (uint8_t i = 0; i < 4; i++) {
+            white( 0, 11 );
+            ws_showarray(ledbuffer, LED_COUNT);
+            delay_ms( 300 );
+            black( 0, 11 );
+            ws_showarray(ledbuffer, LED_COUNT);
+            delay_ms( 300 );
+        }
+    }
+
     // initialize times
     for(uint8_t i = 0; i < modeCount; ++i)
         times[i] = EEReadU16(EEPROM_TIME_START + i*EEPROM_TIME_STEP);
@@ -159,6 +174,7 @@ int main(void)
             delay_ms( 300 );
         }
         progress++;
+        ws_showarray(ledbuffer, LED_COUNT);
         red( progress, bright[brightness] );
         ws_showarray(ledbuffer, LED_COUNT);
         delay_ms( 10 );
