@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import sys
+
+EEPROM_START = 0
+EEPROM_STEP = 16
+EEPROM_COUNT = 3
+BYTES_CNT = 2
+
+assert EEPROM_STEP >= BYTES_CNT
+
+def main():
+    if len(sys.argv) < 2:
+        sys.stderr.write('Usage: parser filename.bin\n')
+        sys.exit(1)
+
+    with open(sys.argv[1], 'rb') as f:
+        f.read(EEPROM_START)
+        for i in range(EEPROM_COUNT):
+            data = f.read(BYTES_CNT)
+            print((data[0] << 8) + data[1])
+            f.read(EEPROM_STEP-BYTES_CNT)
+
+if __name__ == '__main__':
+    main()
