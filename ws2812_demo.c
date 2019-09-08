@@ -218,7 +218,7 @@ int main(void)
         delay_ms( 10 );
 
         sec_counter++;
-        if (sec_counter >= 100) { // 1 second
+        if (sec_counter >= 63) { // 1 second
             sec_counter = 0;
             times[mode]++;
 
