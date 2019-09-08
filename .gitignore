@@ -11,3 +11,4 @@
 # Vim temp files
 *.swp
 *.bin
+.vimrc
